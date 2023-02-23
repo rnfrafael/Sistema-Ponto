@@ -1,3 +1,4 @@
-import PersonController from "./PersonController";
+import PessoaController from "./PessoaController";
+import JornadasController from "./JornadasController";
 
-export { PersonController };
+export { PessoaController, JornadasController };

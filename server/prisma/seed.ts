@@ -2,116 +2,81 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.clockPoints.deleteMany();
-  await prisma.person.deleteMany();
-  await prisma.workdays.deleteMany();
-  await prisma.workdaySchedules.deleteMany();
+  await prisma.pessoa.deleteMany();
+  await prisma.jornadasTrabalho.deleteMany();
+  await prisma.pontos.deleteMany();
+  await prisma.diasDaJornada.deleteMany();
 
-  const hourOne = new Date("2023-01-31T07:30:00.000Z");
-  const hourTwo = new Date("2023-01-31T13:00:00.000Z");
-  const hourThree = new Date("2023-01-31T13:00:00.000Z");
-  const hourFour = new Date("2023-01-31T17:18:00.000Z");
+  const hora1 = new Date("2023-01-31T07:30:00.000Z");
+  const hora2 = new Date("2023-01-31T12:00:00.000Z");
+  const hora3 = new Date("2023-01-31T13:00:00.000Z");
+  const hora4 = new Date("2023-01-31T17:18:00.000Z");
 
   await Promise.all([
-    prisma.person.create({
+    prisma.pessoa.create({
       data: {
-        name: "Rafael Fontenele",
-        cpf: "03252379309",
+        nome: "Rafael Fontenele",
+        cpf: "032-032-320-32",
       },
     }),
-    prisma.person.create({
+    prisma.pessoa.create({
       data: {
-        name: "Yara Alves",
-        cpf: "01816923338",
+        nome: "Yara Alves",
+        cpf: "01801801888",
       },
     }),
-    prisma.person.create({
+    prisma.pessoa.create({
       data: {
-        name: "Gabriel Alves",
+        nome: "Gabriel Alves",
         cpf: "111.222.333-44",
       },
     }),
   ]);
 
   await Promise.all([
-    prisma.workdaySchedules.create({
+    prisma.jornadasTrabalho.create({
       data: {
-        name: "Jornada branjo - basic",
-        Workdays: {
+        nome: "Hua",
+        diasDaJornada: {
           create: [
-            { hour: hourOne, week_day: 1 },
-            { hour: hourOne, week_day: 2 },
-            { hour: hourOne, week_day: 3 },
-            { hour: hourOne, week_day: 4 },
-            { hour: hourOne, week_day: 5 },
-            { hour: hourTwo, week_day: 1 },
-            { hour: hourTwo, week_day: 2 },
-            { hour: hourTwo, week_day: 3 },
-            { hour: hourTwo, week_day: 4 },
-            { hour: hourTwo, week_day: 5 },
-            { hour: hourThree, week_day: 1 },
-            { hour: hourThree, week_day: 2 },
-            { hour: hourThree, week_day: 3 },
-            { hour: hourThree, week_day: 4 },
-            { hour: hourThree, week_day: 5 },
-            { hour: hourFour, week_day: 1 },
-            { hour: hourFour, week_day: 2 },
-            { hour: hourFour, week_day: 3 },
-            { hour: hourFour, week_day: 4 },
-            { hour: hourFour, week_day: 5 },
+            { hora: new Date("2023-01-31T08:00:00.000Z"), dia_da_semana: 1 },
+            { hora: new Date("2023-01-31T12:00:00.000Z"), dia_da_semana: 1 },
+            { hora: new Date("2023-01-31T14:00:00.000Z"), dia_da_semana: 1 },
+            { hora: new Date("2023-01-31T18:00:00.000Z"), dia_da_semana: 1 },
+          ],
+        },
+      },
+    }),
+    prisma.jornadasTrabalho.create({
+      data: {
+        nome: "Jornada branjo - basic",
+        diasDaJornada: {
+          create: [
+            { hora: hora1, dia_da_semana: 1 },
+            { hora: hora2, dia_da_semana: 1 },
+            { hora: hora3, dia_da_semana: 1 },
+            { hora: hora4, dia_da_semana: 1 },
+            { hora: hora1, dia_da_semana: 2 },
+            { hora: hora2, dia_da_semana: 2 },
+            { hora: hora3, dia_da_semana: 2 },
+            { hora: hora4, dia_da_semana: 2 },
+            { hora: hora1, dia_da_semana: 3 },
+            { hora: hora2, dia_da_semana: 3 },
+            { hora: hora3, dia_da_semana: 3 },
+            { hora: hora4, dia_da_semana: 3 },
+            { hora: hora1, dia_da_semana: 4 },
+            { hora: hora3, dia_da_semana: 4 },
+            { hora: hora2, dia_da_semana: 4 },
+            { hora: hora4, dia_da_semana: 4 },
+            { hora: hora1, dia_da_semana: 5 },
+            { hora: hora2, dia_da_semana: 5 },
+            { hora: hora3, dia_da_semana: 5 },
+            { hora: hora4, dia_da_semana: 5 },
           ],
         },
       },
     }),
   ]);
-
-  /*
-  await Promise.all([
-    prisma.person.create({
-      data: {
-        name: "Rafael Fontenele",
-        workdaySchedules: {
-          create: {
-            name: "Workday Schedule - branjo",
-            Workdays: {
-              create: [
-                { hour: hourOne, week_day: 1 },
-                { hour: hourOne, week_day: 2 },
-                { hour: hourOne, week_day: 3 },
-                { hour: hourOne, week_day: 4 },
-                { hour: hourOne, week_day: 5 },
-                { hour: hourTwo, week_day: 1 },
-                { hour: hourTwo, week_day: 2 },
-                { hour: hourTwo, week_day: 3 },
-                { hour: hourTwo, week_day: 4 },
-                { hour: hourTwo, week_day: 5 },
-                { hour: hourThree, week_day: 1 },
-                { hour: hourThree, week_day: 2 },
-                { hour: hourThree, week_day: 3 },
-                { hour: hourThree, week_day: 4 },
-                { hour: hourThree, week_day: 5 },
-                { hour: hourFour, week_day: 1 },
-                { hour: hourFour, week_day: 2 },
-                { hour: hourFour, week_day: 3 },
-                { hour: hourFour, week_day: 4 },
-                { hour: hourFour, week_day: 5 },
-              ],
-            },
-          },
-        },
-      },
-    }),
-    prisma.person.create({
-      data: {
-        name: "Yara Alves",
-      },
-    }),
-    prisma.person.create({
-      data: {
-        name: "Gabriel Alves",
-      },
-    }),
-  ]);*/
 }
 main()
   .then(async () => {

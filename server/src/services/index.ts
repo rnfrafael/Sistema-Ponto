@@ -1,3 +1,4 @@
-import PersonService from "./PersonServices";
+import PessoaService from "./PessoaServices";
+import JornadasService from "./JornadasService";
 
-export { PersonService };
+export { PessoaService, JornadasService };

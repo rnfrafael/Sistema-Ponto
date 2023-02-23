@@ -10,45 +10,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Person {
+model Pessoa {
   id   Int    @id @default(autoincrement())
-  name String
+  nome String
   cpf  String
 
-  workdaySchedules    WorkdaySchedules? @relation(fields: [workdaySchedules_id], references: [id])
-  workdaySchedules_id Int?
-  ClockPoints         ClockPoints[]
+  jornadasTrabalho    jornadasTrabalho? @relation(fields: [jornada_trabalho_id], references: [id])
+  jornada_trabalho_id Int?
+  Pontos              Pontos[]
 
-  @@unique([id, workdaySchedules_id])
-  @@map("people")
+  @@unique([id, jornada_trabalho_id])
+  @@map("pessoas")
 }
 
-model WorkdaySchedules {
-  id       Int        @id @default(autoincrement())
-  name     String
-  Person   Person[]
-  Workdays Workdays[]
+model jornadasTrabalho {
+  id            Int             @id @default(autoincrement())
+  nome          String
+  pessoa        Pessoa[]
+  diasDaJornada DiasDaJornada[]
 
-  @@map("workday_schedules")
+  @@map("jornadas_trabalho")
 }
 
-model Workdays {
-  id       Int      @id @default(autoincrement())
-  hour     DateTime
-  week_day Int
+model DiasDaJornada {
+  id            Int      @id @default(autoincrement())
+  hora          DateTime
+  dia_da_semana Int
 
-  workdaySchedules   WorkdaySchedules @relation(fields: [workdaySchedulesId], references: [id])
-  workdaySchedulesId Int
+  jornadasTrabalho    jornadasTrabalho @relation(fields: [jornada_trabalho_id], references: [id])
+  jornada_trabalho_id Int
 
-  @@map("workdays")
+  @@map("diasDaJornada")
 }
 
-model ClockPoints {
+model Pontos {
   id    Int      @id @default(autoincrement())
-  point DateTime
+  ponto DateTime
 
-  person    Person @relation(fields: [person_id], references: [id])
-  person_id Int
+  pessoa    Pessoa @relation(fields: [pessoa_id], references: [id])
+  pessoa_id Int
 
-  @@map("clock_points")
+  @@map("pontos")
 }
