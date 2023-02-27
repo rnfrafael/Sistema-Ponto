@@ -7,29 +7,18 @@ import {
 
 class PessoaService {
   async pegaTodosOsRegistros() {
-    console.log(`Pega Pessoas service`);
-
     const res = await prisma.pessoa.findMany();
-    console.log(`Pega Pessoas Service ${res} resultado`);
-
     return res;
   }
 
   async pegaUmRegistro(id: number) {
-    console.log("----------pegaUmRegistro Pessoa Inicio----------");
     const res = await prisma.pessoa.findUnique({ where: { id } });
-    console.log("pegaUmRegistro Pessoa Após com res: ---", res);
     return res;
   }
 
   async apagaRegistro(id: number) {
-    console.log("----------apagaRegistro Pessoa Inicio----------");
     const res = await prisma.pessoa.delete({ where: { id } });
-    console.log(
-      "-------apagaRegistro Pessoa Após com res: ---",
-      res,
-      " ---------"
-    );
+
     return res;
   }
 

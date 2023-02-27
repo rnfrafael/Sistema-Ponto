@@ -13,9 +13,9 @@ datasource db {
 model Pessoa {
   id   Int    @id @default(autoincrement())
   nome String
-  cpf  String
+  cpf  String @unique
 
-  jornadasTrabalho    jornadasTrabalho? @relation(fields: [jornada_trabalho_id], references: [id])
+  jornadasTrabalho    jornadasTrabalho? @relation(fields: [jornada_trabalho_id], references: [id], onDelete: SetNull)
   jornada_trabalho_id Int?
   Pontos              Pontos[]
 
@@ -37,7 +37,7 @@ model DiasDaJornada {
   hora          DateTime
   dia_da_semana Int
 
-  jornadasTrabalho    jornadasTrabalho @relation(fields: [jornada_trabalho_id], references: [id])
+  jornadasTrabalho    jornadasTrabalho @relation(fields: [jornada_trabalho_id], references: [id], onDelete: Cascade)
   jornada_trabalho_id Int
 
   @@map("diasDaJornada")
@@ -47,7 +47,7 @@ model Pontos {
   id    Int      @id @default(autoincrement())
   ponto DateTime
 
-  pessoa    Pessoa @relation(fields: [pessoa_id], references: [id])
+  pessoa    Pessoa @relation(fields: [pessoa_id], references: [id], onDelete: Cascade)
   pessoa_id Int
 
   @@map("pontos")

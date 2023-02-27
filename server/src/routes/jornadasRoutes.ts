@@ -1,7 +1,10 @@
 import { FastifyInstance } from "fastify/types/instance";
 import { number, symbol, z } from "zod";
 import { JornadasController } from "../controllers";
-import { JornadaCadastroAPI } from "../interfaces/jornadaCadastroInterface";
+import {
+  IGetJornada,
+  IJornadaCadastro,
+} from "../interfaces/jornadaCadastroInterfaceAPI";
 
 export async function jornadasRoutes(app: FastifyInstance) {
   app.get("/jornadas", async (req, res) => {
@@ -13,24 +16,28 @@ export async function jornadasRoutes(app: FastifyInstance) {
     const idParam = z.object({
       id: z.coerce.number(),
     });
-    const { id } = idParam.parse(req.params);
+    const { id }: IGetJornada = idParam.parse(req.params);
     const result = await JornadasController.pegaJornada(id);
     return result;
   });
 
   app.post("/jornadas/cadastra", async (req, res) => {
-    console.log(req.body);
-    const diasDaJornadaParse = z.object({
+    const diasDaJornada = z.object({
       hora: z.coerce.date(),
       dia_da_semana: z.number(),
     });
-    const bodyToParse = z.object({
+    const jornadaToParse = z.object({
       nome: z.string(),
-      diasDaJornada: z.array(diasDaJornadaParse),
+      diasDaJornada: z.array(diasDaJornada),
     });
-    const body: JornadaCadastroAPI = bodyToParse.parse(req.body);
 
-    const result = await JornadasController.cadastraJornada(body);
+    const jornadaParaCadastro: IJornadaCadastro = jornadaToParse.parse(
+      req.body
+    );
+
+    const result = await JornadasController.cadastraJornada(
+      jornadaParaCadastro
+    );
     return result;
   });
 

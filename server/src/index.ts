@@ -3,11 +3,17 @@ import cors from "@fastify/cors";
 import { jornadasRoutes, pessoasRoutes } from "./routes";
 
 const port = Number(process.env.PORT) || 3009;
+const host = "localhost";
 
 const app = fastify();
-app.register(cors);
+app.register(cors, { origin: "*" });
+
 app.register(pessoasRoutes, jornadasRoutes);
 
-app.listen({ port }).then(() => {
+app.get("/", (req, res) => {
+  return "Olá";
+});
+
+app.listen({ host, port }).then(() => {
   console.log(`Servidor aberto em http://localhost:${port}`);
 });

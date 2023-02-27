@@ -20,3 +20,7 @@ export interface IRegistraPontoPessoa {
   id: number;
   hora: Date;
 }
+
+export interface IGetPessoa {
+  id: number;
+}

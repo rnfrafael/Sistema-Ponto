@@ -1,5 +1,5 @@
 import { prisma } from "../db/db";
-import { JornadaCadastroAPI } from "../interfaces/jornadaCadastroInterface";
+import { IJornadaCadastro } from "../interfaces/jornadaCadastroInterfaceAPI";
 
 class HorariosService {
   async pegaTodosOsRegistros() {
@@ -24,7 +24,6 @@ class HorariosService {
 
   async apagaRegistro(id: number) {
     try {
-      console.log("apagaRegistro Inicio");
       const deleteDiasHorarios = prisma.diasDaJornada.deleteMany({
         where: { jornada_trabalho_id: id },
       });
@@ -36,7 +35,6 @@ class HorariosService {
         deleteJornada,
       ]);
       // await prisma.diasDaJornada.delete({where:})
-      console.log("apagaRegistro Após com res: ", res);
       return res;
     } catch (error) {
       console.log(error);
@@ -44,7 +42,7 @@ class HorariosService {
     }
   }
 
-  async cadastraJornada({ nome, diasDaJornada }: JornadaCadastroAPI) {
+  async cadastraJornada({ nome, diasDaJornada }: IJornadaCadastro) {
     const res = await prisma.jornadasTrabalho.create({
       data: {
         nome: nome,
@@ -53,10 +51,7 @@ class HorariosService {
         },
       },
     });
-    console.log(
-      "🚀 ~ file: JornadasService.ts:56 ~ HorariosService ~ cadastraJornada ~ res:",
-      res
-    );
+
     return res;
   }
 }

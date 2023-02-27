@@ -1,4 +1,4 @@
-import { JornadaCadastroAPI } from "../interfaces/jornadaCadastroInterface";
+import { IJornadaCadastro } from "../interfaces/jornadaCadastroInterfaceAPI";
 import { JornadasService } from "../services";
 
 const jornadaService = new JornadasService();
@@ -13,7 +13,7 @@ class JornadasController {
     const res1 = await jornadaService.pegaUmRegistro(id);
     return res1;
   }
-  static async cadastraJornada(registro: JornadaCadastroAPI) {
+  static async cadastraJornada(registro: IJornadaCadastro) {
     const res1 = await jornadaService.cadastraJornada(registro);
     return res1;
   }

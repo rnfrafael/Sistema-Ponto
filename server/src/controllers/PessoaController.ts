@@ -4,6 +4,7 @@ import {
   IRegistraPontoPessoa,
 } from "../interfaces/pessoaInterfaceAPI";
 import { PessoaService } from "../services";
+import { UtilsCPF } from "../utils/";
 const pessoaService = new PessoaService();
 
 class PessoaController {
@@ -18,6 +19,10 @@ class PessoaController {
   }
 
   static async cadastraPessoa(registro: IPessoaCadastroAPI) {
+    if (!UtilsCPF.validarCPF(registro.cpf)) {
+      throw new Error("CPF inválido");
+    }
+    registro.cpf = UtilsCPF.padronizaCPF(registro.cpf); // salva todos os CPF no formato xxx.xxx.xxx-xx
     const res1 = await pessoaService.cadastraPessoa(registro);
     return res1;
   }

@@ -3,7 +3,6 @@ import { symbol, z } from "zod";
 import { PessoaController } from "../controllers";
 import {
   IJornadaDaPessoa,
-  IPessoaAPI,
   IPessoaCadastroAPI,
 } from "../interfaces/pessoaInterfaceAPI";
 
@@ -34,7 +33,7 @@ export async function pessoasRoutes(app: FastifyInstance) {
     const bodyToParse = z.object({
       nome: z.string(),
       cpf: z.string(),
-      jornada_trabalho_id: z.number(),
+      jornada_trabalho_id: z.coerce.number().optional(),
     });
     const pessoa: IPessoaCadastroAPI = bodyToParse.parse(req.body);
 
