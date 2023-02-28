@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ErrorORSuccess from "./ErrorOrSuccess";
 
-interface IErrorPopupTimeout {
+export interface IErrorPopupTimeout {
   mensagem?: string;
   data?: Date;
   nome?: string;
@@ -73,7 +73,8 @@ function ErrorPopupTimeout({
 
           <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
             <button
-              type="button"
+              autoFocus
+              type="submit"
               onClick={() => {
                 setVisible(false);
                 onClose();

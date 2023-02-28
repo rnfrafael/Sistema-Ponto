@@ -18,7 +18,7 @@ export interface IJornadaDaPessoa {
 
 export interface IRegistraPontoPessoa {
   id: number;
-  hora: Date;
+  data: Date;
 }
 
 export interface IGetPessoa {

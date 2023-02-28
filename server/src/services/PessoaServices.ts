@@ -53,11 +53,16 @@ class PessoaService {
     }
   }
 
-  async registraPonto({ id, hora }: IRegistraPontoPessoa) {
+  async registraPonto({ id, data }: IRegistraPontoPessoa) {
     try {
+      console.log(
+        "🚀 ~ file: PessoaServices.ts:57 ~ PessoaService ~ registraPonto ~ data:",
+        data
+      );
+
       const res = await prisma.pessoa.update({
         where: { id },
-        data: { Pontos: { create: [{ ponto: hora }] } },
+        data: { Pontos: { create: [{ ponto: data }] } },
       });
       return res;
     } catch (error: any) {

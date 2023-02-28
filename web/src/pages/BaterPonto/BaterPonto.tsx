@@ -1,30 +1,20 @@
 import { useEffect, useState } from "react";
-import BateuPontoPopup from "../components/BateuPontoPopup";
-import ErrorPopupTimeout from "../components/ErrorPopupTimeout";
+import BateuPontoPopup from "../../components/BateuPontoPopup";
+import ErrorPopupTimeout from "../../components/ErrorPopupTimeout";
 
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
 
-import { quatroUltimosDigitosCpfSemHifen } from "../utils/validaCPF";
-import { BASE_URL_API } from "../utils/vars";
+import { quatroUltimosDigitosCpfSemHifen } from "../../utils/validaCPF";
+import { BASE_URL_API } from "../../utils/vars";
+import { IPessoaAPI, IPessoasIdECpf } from "./baterPontoInterfaces";
+import { fetchPessoas, fetchRegistraPonto, testaSenha } from "./functions";
 
-interface IPessoaAPI {
-  id: number;
-  nome: string;
-  cpf: string;
-  jornada_trabalho_id?: number;
-}
-interface IPessoasIdECpf {
-  id: number;
-  senhaCpf: string;
-  nome: string;
-  cpf: string;
-}
-
-interface IPropsPopup {
-  nome?: string;
-  data?: Date;
+export interface IErrorPopupTimeoutMessage {
   mensagem?: string;
-  callback?: Function;
+  data?: Date;
+  nome?: string;
+  falha?: boolean;
+  onClose?: Function;
 }
 
 function BaterPonto() {
@@ -32,40 +22,16 @@ function BaterPonto() {
   const [loading, setLoading] = useState(true);
   const [pessoasPonto, setPessoasPonto] = useState<IPessoasIdECpf[]>([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [showPopupMessage, setShowPopupMessage] = useState<IPropsPopup>({});
+  const [showPopupProps, setShowPopupProps] =
+    useState<IErrorPopupTimeoutMessage>({});
 
-  const testaSenha = (senha: string) => {
-    const pessoa = pessoasPonto.find((pessoa) => {
-      return pessoa.senhaCpf === senha;
-    });
-    return pessoa ? pessoa : false;
-  };
-
-  //Ao carregar página busca pessoas/fetch
+  //Ao carregar página busca pessoas/fetch e popula na memoria
   useEffect(() => {
     try {
-      const fetchPessoas = async () => {
-        const response = await fetch(`${BASE_URL_API}/pessoas`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const pessoasFetch: IPessoaAPI[] = await response.json();
-        const pessoasIdECpf: IPessoasIdECpf[] = pessoasFetch.map((pessoa) => {
-          const cpfSemHifen4UltimosDigitos = quatroUltimosDigitosCpfSemHifen(
-            pessoa.cpf
-          );
-          return {
-            id: pessoa.id,
-            senhaCpf: cpfSemHifen4UltimosDigitos,
-            nome: pessoa.nome,
-            cpf: pessoa.cpf,
-          };
-        });
-        setPessoasPonto(pessoasIdECpf);
+      fetchPessoas().then((result) => {
+        setPessoasPonto(result);
         setLoading(false);
-      };
-      fetchPessoas();
+      });
     } catch (error) {
       console.log(error);
     }
@@ -77,18 +43,28 @@ function BaterPonto() {
     }
   };
 
-  //Teste de senha
+  //Teste de senha se é válido ou não
   useEffect(() => {
     if (inputValue.length === 4) {
-      const res = testaSenha(inputValue);
+      const res = testaSenha(inputValue, pessoasPonto);
       if (res) {
-        setShowPopupMessage({
+        setShowPopupProps({
           mensagem: "Ponto efetuado",
           nome: res.nome,
           data: new Date(),
+          falha: false,
         });
+        const payload = {
+          id: res.id,
+          data: new Date(),
+        };
+        fetchRegistraPonto(payload);
       } else {
-        setShowPopupMessage({ mensagem: "Erro na senha" });
+        setShowPopupProps({
+          mensagem: "Erro na senha, ponto não efetuado",
+          falha: true,
+          data: new Date(),
+        });
       }
       setShowPopup(true);
       setInputValue("");
@@ -157,9 +133,10 @@ function BaterPonto() {
         </div>
       ) : (
         <ErrorPopupTimeout
-          mensagem={showPopupMessage.mensagem}
-          data={showPopupMessage.data}
-          nome={showPopupMessage.nome}
+          mensagem={showPopupProps.mensagem}
+          data={showPopupProps.data}
+          nome={showPopupProps.nome}
+          falha={showPopupProps.falha}
           onClose={() => {
             setShowPopup(false);
           }}

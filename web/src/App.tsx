@@ -2,11 +2,10 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import About from "./pages/About";
 
-import BaterPonto from "./pages/BaterPonto";
+import BaterPonto from "./pages/BaterPonto/BaterPonto";
 import FormCadastroPessoa from "./pages/FormCadastroPessoa";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-
 function App() {
   return (
     <div className="flex h-screen flex-col">

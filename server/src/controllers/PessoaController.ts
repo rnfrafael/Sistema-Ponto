@@ -33,6 +33,10 @@ class PessoaController {
   }
 
   static async registraPonto(dados: IRegistraPontoPessoa) {
+    console.log(
+      "🚀 ~ file: PessoaController.ts:36 ~ PessoaController ~ registraPonto ~ dados:",
+      dados.data
+    );
     const res1 = await pessoaService.registraPonto(dados);
     return res1;
   }

@@ -42,9 +42,13 @@ export async function pessoasRoutes(app: FastifyInstance) {
   });
 
   app.post("/pessoas/:id/registrarPonto", async (req, res) => {
-    const dadosToParse = z.object({
+    const reqParams = z.object({
       id: z.coerce.number(),
     });
+    const reqBody = z.object({
+      data: z.coerce.date(),
+    });
+    /*
     const horaUTC = new Date();
     const hora = new Date(
       horaUTC.getFullYear(),
@@ -54,10 +58,21 @@ export async function pessoasRoutes(app: FastifyInstance) {
       horaUTC.getMinutes(),
       horaUTC.getSeconds(),
       horaUTC.getMilliseconds()
-    );
-    const { id } = dadosToParse.parse(req.params);
+    );*/
 
-    const result = await PessoaController.registraPonto({ id, hora });
+    const { id } = reqParams.parse(req.params);
+    let { data } = reqBody.parse(req.body);
+    data = new Date(
+      data.getFullYear(),
+      data.getMonth(),
+      data.getDate(),
+      data.getHours() - 3,
+      data.getMinutes(),
+      data.getSeconds(),
+      data.getMilliseconds()
+    );
+
+    const result = await PessoaController.registraPonto({ id, data });
     return result;
   });
 

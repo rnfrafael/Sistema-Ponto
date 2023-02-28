@@ -4,6 +4,7 @@ import { jornadasRoutes, pessoasRoutes } from "./routes";
 
 const port = Number(process.env.PORT) || 3009;
 const host = "localhost";
+// process.env.TZ = "America/Fortaleza";
 
 const app = fastify();
 app.register(cors, { origin: "*" });
