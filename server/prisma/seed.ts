@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+import { stringCodification } from "../src/utils/passwordFn";
 
 async function main() {
   await prisma.pessoa.deleteMany();
@@ -12,23 +13,28 @@ async function main() {
   const hora3 = new Date("2023-01-31T13:00:00.000Z");
   const hora4 = new Date("2023-01-31T17:18:00.000Z");
 
+  const senha = stringCodification("1234");
+
   await Promise.all([
     prisma.pessoa.create({
       data: {
         nome: "Rafael Fontenele",
         cpf: "032-032-320-32",
+        senha,
       },
     }),
     prisma.pessoa.create({
       data: {
         nome: "Yara Alves",
         cpf: "01801801888",
+        senha,
       },
     }),
     prisma.pessoa.create({
       data: {
         nome: "Gabriel Alves",
         cpf: "111.222.333-44",
+        senha,
       },
     }),
   ]);

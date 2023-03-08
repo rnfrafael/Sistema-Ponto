@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Pessoa {
-  id   Int    @id @default(autoincrement())
-  nome String
-  cpf  String @unique
+  id    Int    @id @default(autoincrement())
+  nome  String
+  cpf   String @unique
+  senha String
 
   jornadasTrabalho    jornadasTrabalho? @relation(fields: [jornada_trabalho_id], references: [id], onDelete: SetNull)
   jornada_trabalho_id Int?
