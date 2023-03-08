@@ -41,6 +41,19 @@ class PessoaController {
     return res1;
   }
 
+  static async buscaPontos({
+    id,
+    diaInicio,
+    diaFinal,
+  }: {
+    id: number;
+    diaInicio: Date;
+    diaFinal: Date;
+  }) {
+    const res1 = await pessoaService.buscaPontos({ id, diaInicio, diaFinal });
+    return res1;
+  }
+
   static async deletaPessoa(id: number) {
     const res1 = await pessoaService.apagaRegistro(id);
     return res1;

@@ -2,6 +2,7 @@ export interface IPessoaCadastroAPI {
   id?: number;
   nome: string;
   cpf: string;
+  senha: string;
   jornada_trabalho_id?: number;
 }
 export interface IPessoaAPI {
@@ -19,6 +20,12 @@ export interface IJornadaDaPessoa {
 export interface IRegistraPontoPessoa {
   id: number;
   data: Date;
+}
+
+export interface IBuscaPontos {
+  id: number;
+  data: Date;
+  pessoa_id: number;
 }
 
 export interface IGetPessoa {
