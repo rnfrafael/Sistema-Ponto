@@ -1,21 +1,13 @@
 import { useEffect, useState } from "react";
-import BateuPontoPopup from "../../components/BateuPontoPopup";
-import ErrorPopupTimeout from "../../components/ErrorPopupTimeout";
+import { ErrorPopupTimeout, Loading } from "../../components/";
 
-import Loading from "../../components/Loading";
+import {
+  IErrorPopupTimeoutMessage,
+  IPessoaAPI,
+  IPessoasIdECpf,
+} from "./baterPontoInterfaces";
 
-import { quatroUltimosDigitosCpfSemHifen } from "../../utils/validaCPF";
-import { BASE_URL_API } from "../../utils/vars";
-import { IPessoaAPI, IPessoasIdECpf } from "./baterPontoInterfaces";
 import { fetchPessoas, fetchRegistraPonto, testaSenha } from "./functions";
-
-export interface IErrorPopupTimeoutMessage {
-  mensagem?: string;
-  data?: Date;
-  nome?: string;
-  falha?: boolean;
-  onClose?: Function;
-}
 
 function BaterPonto() {
   const [inputValue, setInputValue] = useState<string>("");

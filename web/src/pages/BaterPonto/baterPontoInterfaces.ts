@@ -15,3 +15,12 @@ export interface IRegistraPontoPOST {
   id: number;
   data: Date;
 }
+
+//---------------------
+export interface IErrorPopupTimeoutMessage {
+  mensagem?: string;
+  data?: Date;
+  nome?: string;
+  falha?: boolean;
+  onClose?: Function;
+}

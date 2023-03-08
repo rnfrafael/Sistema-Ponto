@@ -18,7 +18,7 @@ export async function fetchRegistraPonto(dados: IRegistraPontoPOST) {
   console.log(dados.data);
 
   const pontoRegistrado = await fetch(
-    `${BASE_URL_API}/pessoas/${dados.id}/registrarPonto`,
+    `${BASE_URL_API}/pessoas/${dados.id}/registrar_ponto`,
     options
   ).then((d) => d.json());
 

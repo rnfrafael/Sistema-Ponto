@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { BrowserRouter as Route, Link } from "react-router-dom";
 
-export const NavigationMenu = () => {
+const NavBar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false); // initiate isNavOpen state with false
   return (
-    <div className="flex justify-end space-x-4">
+    <div className="flex justify-end space-x-4 text-white">
       <nav>
         <section className="MOBILE-MENU flex lg:hidden">
           <div
@@ -140,3 +140,5 @@ export const NavigationMenu = () => {
     </div>
   );
 };
+
+export default NavBar;
