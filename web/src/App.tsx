@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Header from "./components/Header";
-import About from "./pages/About";
+import { Header } from "./components/";
+import About from "./pages/About/About";
 
 import BaterPonto from "./pages/BaterPonto/BaterPonto";
-import FormCadastroPessoa from "./pages/FormCadastroPessoa";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
+import FormCadastroPessoa from "./pages/FormCadastroPessoa/FormCadastroPessoa";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
 function App() {
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col bg-gray-600">
       <Router>
         <Header />
         <Routes>
@@ -22,5 +22,8 @@ function App() {
     </div>
   );
 }
+
+//const { navigate } = useNavigation();
+// () => navigate("routeName")
 
 export default App;
