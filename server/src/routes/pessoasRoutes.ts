@@ -1,7 +1,9 @@
 import { FastifyInstance } from "fastify/types/instance";
-import { symbol, z } from "zod";
+import dayjs from "dayjs";
+import { date, symbol, z } from "zod";
 import { PessoaController } from "../controllers";
 import {
+  IBuscaPontos,
   IJornadaDaPessoa,
   IPessoaCadastroAPI,
 } from "../interfaces/pessoaInterfaceAPI";
@@ -9,7 +11,7 @@ import {
 export async function pessoasRoutes(app: FastifyInstance) {
   app.get("/pessoas", async (req, res) => {
     const result = await PessoaController.pegaTodasAsPessoas();
-    return result;
+    return res.status(200).send(JSON.stringify(result, null, 2));
   });
 
   app.get("/pessoas/:id", async (req, res) => {
@@ -33,46 +35,12 @@ export async function pessoasRoutes(app: FastifyInstance) {
     const bodyToParse = z.object({
       nome: z.string(),
       cpf: z.string(),
+      senha: z.string().min(8, "A senha não contém os caracteres minimos: 8"),
       jornada_trabalho_id: z.coerce.number().optional(),
     });
     const pessoa: IPessoaCadastroAPI = bodyToParse.parse(req.body);
 
     const result = await PessoaController.cadastraPessoa(pessoa);
-    return result;
-  });
-
-  app.post("/pessoas/:id/registrarPonto", async (req, res) => {
-    const reqParams = z.object({
-      id: z.coerce.number(),
-    });
-    const reqBody = z.object({
-      data: z.coerce.date(),
-    });
-    /*
-    const horaUTC = new Date();
-    const hora = new Date(
-      horaUTC.getFullYear(),
-      horaUTC.getMonth(),
-      horaUTC.getDate(),
-      horaUTC.getHours() - 3,
-      horaUTC.getMinutes(),
-      horaUTC.getSeconds(),
-      horaUTC.getMilliseconds()
-    );*/
-
-    const { id } = reqParams.parse(req.params);
-    let { data } = reqBody.parse(req.body);
-    data = new Date(
-      data.getFullYear(),
-      data.getMonth(),
-      data.getDate(),
-      data.getHours() - 3,
-      data.getMinutes(),
-      data.getSeconds(),
-      data.getMilliseconds()
-    );
-
-    const result = await PessoaController.registraPonto({ id, data });
     return result;
   });
 
@@ -95,6 +63,55 @@ export async function pessoasRoutes(app: FastifyInstance) {
     });
     const { id } = idParam.parse(req.params);
     const result = await PessoaController.deletaPessoa(id);
+    return result;
+  });
+
+  app.post("/pessoas/:id/registrar_ponto", async (req, res) => {
+    const reqParams = z.object({
+      id: z.coerce.number(),
+    });
+    const reqBody = z.object({
+      data: z.coerce.date(),
+    });
+
+    const { id } = reqParams.parse(req.params);
+    const { data } = reqBody.parse(req.body);
+    /*data = new Date(
+      data.getFullYear(),
+      data.getMonth(),
+      data.getDate(),
+      data.getHours() - 3,
+      data.getMinutes(),
+      data.getSeconds(),
+      data.getMilliseconds()
+    );*/
+
+    const result = await PessoaController.registraPonto({ id, data });
+    console.log("🚀 ~ file: pessoasRoutes.ts:91 ~ app.post ~ result:", result);
+
+    return result;
+  });
+
+  app.get("/pessoas/:id/busca_pontos", async (req, res) => {
+    const idParam = z.object({
+      id: z.coerce.number(),
+    });
+
+    const dataBody = z.object({
+      data: z.coerce.date(),
+    });
+
+    const { data } = dataBody.parse(req.query);
+
+    const diaInicio = dayjs(data).startOf("day").toDate();
+    const diaFinal = dayjs(data).endOf("day").toDate();
+
+    const { id } = idParam.parse(req.params);
+    const result: IBuscaPontos = await PessoaController.buscaPontos({
+      id,
+      diaInicio,
+      diaFinal,
+    });
     return result;
   });
 }

@@ -55,14 +55,35 @@ class PessoaService {
 
   async registraPonto({ id, data }: IRegistraPontoPessoa) {
     try {
-      console.log(
-        "🚀 ~ file: PessoaServices.ts:57 ~ PessoaService ~ registraPonto ~ data:",
-        data
-      );
-
       const res = await prisma.pessoa.update({
         where: { id },
         data: { Pontos: { create: [{ ponto: data }] } },
+      });
+      return res;
+    } catch (error: any) {
+      console.log(error);
+      return error;
+    }
+  }
+
+  async buscaPontos({
+    id,
+    diaInicio,
+    diaFinal,
+  }: {
+    id: number;
+    diaInicio: Date;
+    diaFinal: Date;
+  }) {
+    try {
+      const res = await prisma.pontos.findMany({
+        where: {
+          pessoa_id: id,
+          ponto: {
+            lt: diaFinal.toISOString(),
+            gt: diaInicio.toISOString(),
+          },
+        },
       });
       return res;
     } catch (error: any) {
