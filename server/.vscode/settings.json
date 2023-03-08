@@ -10,5 +10,11 @@
     "node_modules": true,
     "dist": true
   },
-  "explorerExclude.backup": {}
+  "explorerExclude.backup": {},
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#3399FF",
+    "statusBar.debuggingBackground": "#3399FF",
+    "statusBar.noFolderBackground": "#3399FF",
+    "statussBar.prominentBackground": "#3399FF"
+  }
 }
