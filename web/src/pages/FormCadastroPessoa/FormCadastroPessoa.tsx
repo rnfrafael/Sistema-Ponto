@@ -3,12 +3,10 @@ import InputMask from "comigo-tech-react-input-mask";
 import { validarCPF } from "../../utils/validaCPF";
 import { ErrorPopupTimeout, Loading } from "../../components";
 import { BASE_URL_API } from "../../utils/vars";
-
-interface IFormCadastroPessoa {
-  nome: string;
-  cpf: string;
-  jornada_trabalho_id: number;
-}
+import clsx from "clsx";
+import ErrorMessageInput from "../../components/ErrorMessageInput";
+import { cadastrarPessoa } from "./functions";
+import { ICadastroPessoa } from "./InterfacesCadastroPessoa";
 
 interface IJornadaAPI {
   id: number;
@@ -16,12 +14,19 @@ interface IJornadaAPI {
 }
 
 function FormCadastroPessoa() {
+  //----inputs----
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
+  const [senha, setSenha] = useState("");
+  const [senha2, setSenha2] = useState("");
   const [jornada, setJornada] = useState("");
   const [jornadasDeTrabalho, setJornadasDeTrabalho] = useState<IJornadaAPI[]>(
     []
   );
+
+  const [mensagemErroSenha, setMensagemErroSenha] = useState("");
+  const [senhasDiferentes, setSenhasDiferentes] = useState(false);
+
   const [showPopup, setShowPopup] = useState(false);
   const [tipoDeIconeFalha, setTipoDeIconeFalha] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,19 +47,42 @@ function FormCadastroPessoa() {
     setIsLoading(false);
   }, []);
 
-  const handleNomeChange = (event: any) => {
+  const handleNomeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNome(event.target.value);
   };
 
-  const handleCpfChange = (event: any) => {
+  const handleSenhaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSenha(event.target.value);
+    event.target.value.length < 8
+      ? setMensagemErroSenha("Senha deve ter pelo menos 8 caracteres")
+      : setMensagemErroSenha("");
+    event.target.value.length === 0 ? setMensagemErroSenha("") : null;
+    if (event.target.value === senha2) {
+      setSenhasDiferentes(false);
+      return;
+    }
+    setSenhasDiferentes(true);
+  };
+  const handleSenha2Change = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSenha2(event.target.value);
+
+    if (event.target.value === senha) {
+      setSenhasDiferentes(false);
+      return;
+    }
+
+    setSenhasDiferentes(true);
+  };
+
+  const handleCpfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCpf(event.target.value);
   };
 
-  const handleJornadaChange = (event: any) => {
+  const handleJornadaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setJornada(event.target.value);
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!validarCPF(cpf)) {
       setTipoDeIconeFalha(true);
@@ -62,38 +90,26 @@ function FormCadastroPessoa() {
       return;
     }
 
-    const payload = {
+    const dados: ICadastroPessoa = {
       nome,
       cpf,
-      jornada_trabalho_id: jornada,
+      senha,
+      jornada_trabalho_id: Number(jornada),
     };
-    console.log("Payload:", payload);
-    // Aqui você pode enviar as informações para o servidor
-    const cadastrarPessoa = async () => {
-      try {
-        const cadastraPessoa = await fetch(`${BASE_URL_API}/pessoas/cadastra`, {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: { "Content-Type": "application/json" },
-        }).then((d) => d.json());
-        console.log(
-          "🚀 ~ file: FormCadastroPessoa.tsx:73 ~ cadastraPessoa ~ cadastraPessoa:",
-          cadastraPessoa
-        );
-      } catch (error) {
-        console.log(
-          "🚀 ~ file: FormCadastroPessoa.tsx:77 ~ cadastrarPessoa ~ error:",
-          error
-        );
-      }
-    };
-    cadastrarPessoa();
+    const res = cadastrarPessoa(dados);
+    console.log(
+      "🚀 ~ file: FormCadastroPessoa.tsx:100 ~ handleSubmit ~ res:",
+      res
+    );
   };
 
   const handleReset = () => {
     setNome("");
     setCpf("");
+    setSenha("");
+    setSenha2("");
     setJornada("");
+    setMensagemErroSenha("");
   };
 
   return !showPopup ? (
@@ -116,6 +132,53 @@ function FormCadastroPessoa() {
               placeholder="Digite seu nome"
               value={nome}
               onChange={handleNomeChange}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block font-medium text-gray-700 mb-2"
+              htmlFor="inputSenha"
+            >
+              Senha:
+            </label>
+            <input
+              className={clsx(
+                "placeholder:text-xs w-full appearance-none border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring",
+                {
+                  "border-red-500": senhasDiferentes,
+                }
+              )}
+              id="inputSenha"
+              name="inputSenha"
+              type="password"
+              placeholder="Digite sua Senha"
+              value={senha}
+              onChange={handleSenhaChange}
+              required
+            />
+            <ErrorMessageInput mensagem={mensagemErroSenha} />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block font-medium text-gray-700 mb-2"
+              htmlFor="inputSenha2"
+            >
+              Digite novamente a senha:
+            </label>
+            <input
+              className={clsx(
+                "placeholder:text-xs w-full appearance-none border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring",
+                {
+                  "border-red-500": senhasDiferentes,
+                }
+              )}
+              id="inputSenha2"
+              name="inputSenha2"
+              type="password"
+              placeholder="Digite sua novamente"
+              value={senha2}
+              onChange={handleSenha2Change}
               required
             />
           </div>
