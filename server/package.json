@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^8.2.0",
-    "@prisma/client": "^4.9.0",
+    "@prisma/client": "^4.11.0",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "fastify": "^4.12.0",
