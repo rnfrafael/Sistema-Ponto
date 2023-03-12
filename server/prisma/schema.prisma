@@ -21,6 +21,7 @@ model Pessoa {
   Pontos              Pontos[]
 
   @@unique([id, jornada_trabalho_id])
+  @@unique([cpf, senha])
   @@map("pessoas")
 }
 
