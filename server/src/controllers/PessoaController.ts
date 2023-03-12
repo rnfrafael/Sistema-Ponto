@@ -1,5 +1,6 @@
 import {
   IJornadaDaPessoa,
+  ILoginPessoa,
   IPessoaCadastroAPI,
   IRegistraPontoPessoa,
 } from "../interfaces/pessoaInterfaceAPI";
@@ -27,18 +28,26 @@ class PessoaController {
     return res1;
   }
 
+  static async logaPessoa({ cpf, senha }: ILoginPessoa) {
+    if (!UtilsCPF.validarCPF(cpf)) {
+      throw new Error("CPF inválido");
+    }
+    cpf = UtilsCPF.padronizaCPF(cpf); // salva todos os CPF no formato xxx.xxx.xxx-xx
+    const res = await pessoaService.logaPessoa({ cpf, senha });
+
+    if (senha === res?.senha) return "Usuário encotrado";
+
+    return "ERRO, usuario ou senha inválidos";
+  }
+
   static async cadastraJornadaDaPessoa(registro: IJornadaDaPessoa) {
     const res1 = await pessoaService.cadastraJornadaDaPessoa(registro);
     return res1;
   }
 
   static async registraPonto(dados: IRegistraPontoPessoa) {
-    console.log(
-      "🚀 ~ file: PessoaController.ts:36 ~ PessoaController ~ registraPonto ~ dados:",
-      dados.data
-    );
-    const res1 = await pessoaService.registraPonto(dados);
-    return res1;
+    const res = await pessoaService.registraPonto(dados);
+    return res;
   }
 
   static async buscaPontos({

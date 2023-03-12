@@ -5,6 +5,12 @@ export interface IPessoaCadastroAPI {
   senha: string;
   jornada_trabalho_id?: number;
 }
+
+export interface ILoginPessoa {
+  cpf: string;
+  senha: string;
+}
+
 export interface IPessoaAPI {
   id: number;
   nome: string;

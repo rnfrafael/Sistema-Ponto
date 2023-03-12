@@ -1,6 +1,7 @@
 import { prisma } from "../db/db";
 import {
   IJornadaDaPessoa,
+  ILoginPessoa,
   IPessoaCadastroAPI,
   IRegistraPontoPessoa,
 } from "../interfaces/pessoaInterfaceAPI";
@@ -22,10 +23,25 @@ class PessoaService {
     return res;
   }
 
-  async cadastraPessoa({ nome, cpf }: IPessoaCadastroAPI) {
-    const res = await prisma.pessoa.create({
-      data: {
-        nome,
+  async cadastraPessoa({ nome, cpf, senha }: IPessoaCadastroAPI) {
+    try {
+      const res = await prisma.pessoa.create({
+        data: {
+          nome,
+          cpf,
+          senha,
+        },
+      });
+      return res;
+    } catch (error: any) {
+      if (error.code === "P2002") throw new Error("Usuário já cadastrado");
+      return error.message;
+    }
+  }
+
+  async logaPessoa({ cpf, senha }: ILoginPessoa) {
+    const res = await prisma.pessoa.findUnique({
+      where: {
         cpf,
       },
     });

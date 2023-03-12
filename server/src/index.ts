@@ -12,7 +12,7 @@ app.register(cors, { origin: "*" });
 app.register(pessoasRoutes, jornadasRoutes);
 
 app.get("/", (req, res) => {
-  return "Olá";
+  return "Oláaaa";
 });
 
 app.listen({ host, port }).then(() => {

@@ -1,12 +1,13 @@
 import { FastifyInstance } from "fastify/types/instance";
 import dayjs from "dayjs";
-import { date, symbol, z } from "zod";
+import { z } from "zod";
 import { PessoaController } from "../controllers";
 import {
   IBuscaPontos,
   IJornadaDaPessoa,
   IPessoaCadastroAPI,
 } from "../interfaces/pessoaInterfaceAPI";
+import { stringCodification } from "../utils";
 
 export async function pessoasRoutes(app: FastifyInstance) {
   app.get("/pessoas", async (req, res) => {
@@ -31,6 +32,24 @@ export async function pessoasRoutes(app: FastifyInstance) {
     }
   });
 
+  app.post("/pessoas/logar", async (req, res) => {
+    try {
+      const loginBody = z.object({
+        cpf: z.coerce.string(),
+        senha: z.coerce.string(),
+      });
+      let { cpf, senha } = loginBody.parse(req.body);
+      senha = stringCodification(senha);
+      const result = await PessoaController.logaPessoa({ cpf, senha });
+      return res.status(201).send(result);
+    } catch (error) {
+      return res.status(422).send({
+        message: "Não foi possível realizar consulta",
+        erro: error,
+      });
+    }
+  });
+
   app.post("/pessoas/cadastra", async (req, res) => {
     const bodyToParse = z.object({
       nome: z.string(),
@@ -40,8 +59,16 @@ export async function pessoasRoutes(app: FastifyInstance) {
     });
     const pessoa: IPessoaCadastroAPI = bodyToParse.parse(req.body);
 
-    const result = await PessoaController.cadastraPessoa(pessoa);
-    return result;
+    pessoa.senha = stringCodification(pessoa.senha);
+    try {
+      const result = await PessoaController.cadastraPessoa(pessoa);
+
+      return res
+        .status(201)
+        .send({ message: "Usuario Cadastrado com sucesso" });
+    } catch (error) {
+      return res.status(409).send(error);
+    }
   });
 
   app.patch("/pessoas/jornada", async (req, res) => {
@@ -76,15 +103,6 @@ export async function pessoasRoutes(app: FastifyInstance) {
 
     const { id } = reqParams.parse(req.params);
     const { data } = reqBody.parse(req.body);
-    /*data = new Date(
-      data.getFullYear(),
-      data.getMonth(),
-      data.getDate(),
-      data.getHours() - 3,
-      data.getMinutes(),
-      data.getSeconds(),
-      data.getMilliseconds()
-    );*/
 
     const result = await PessoaController.registraPonto({ id, data });
     console.log("🚀 ~ file: pessoasRoutes.ts:91 ~ app.post ~ result:", result);
