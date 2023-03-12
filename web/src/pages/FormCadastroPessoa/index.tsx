@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import InputMask from "comigo-tech-react-input-mask";
 import { validarCPF } from "../../utils/validaCPF";
 import { ErrorPopupTimeout, Loading } from "../../components";
@@ -6,12 +6,8 @@ import { BASE_URL_API } from "../../utils/vars";
 import clsx from "clsx";
 import ErrorMessageInput from "../../components/ErrorMessageInput";
 import { cadastrarPessoa } from "./functions";
-import { ICadastroPessoa } from "./InterfacesCadastroPessoa";
-
-interface IJornadaAPI {
-  id: number;
-  nome: string;
-}
+import { ICadastroPessoa, IJornadas } from "./InterfacesCadastroPessoa";
+import { JornadasDeTrabalho } from "./JornadasDeTrabalho";
 
 function FormCadastroPessoa() {
   //----inputs----
@@ -20,9 +16,7 @@ function FormCadastroPessoa() {
   const [senha, setSenha] = useState("");
   const [senha2, setSenha2] = useState("");
   const [jornada, setJornada] = useState("");
-  const [jornadasDeTrabalho, setJornadasDeTrabalho] = useState<IJornadaAPI[]>(
-    []
-  );
+  const [jornadasDeTrabalho, setJornadasDeTrabalho] = useState<IJornadas[]>([]);
 
   const [mensagemErroSenha, setMensagemErroSenha] = useState("");
   const [senhasDiferentes, setSenhasDiferentes] = useState(false);
@@ -36,7 +30,7 @@ function FormCadastroPessoa() {
       setIsLoading(true);
       try {
         const response = await fetch(`${BASE_URL_API}/jornadas`);
-        const data: IJornadaAPI[] = await response.json();
+        const data: IJornadas[] = await response.json();
         setJornadasDeTrabalho(data);
       } catch (error) {
         console.log(error);
@@ -78,9 +72,12 @@ function FormCadastroPessoa() {
     setCpf(event.target.value);
   };
 
-  const handleJornadaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setJornada(event.target.value);
-  };
+  const handleJornadaChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setJornada(event.target.value);
+    },
+    [setJornada]
+  );
 
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -202,29 +199,11 @@ function FormCadastroPessoa() {
               required
             />
           </div>
-          <div className="mb-4">
-            <label
-              className="block font-medium text-gray-700 mb-2"
-              htmlFor="selectJornada"
-            >
-              Jornada de trabalho:
-            </label>
-            <select
-              className="text-xs w-full appearance-none border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
-              id="selectJornada"
-              name="selectJornada"
-              value={jornada}
-              onChange={handleJornadaChange}
-            >
-              <option value="">Selecione uma jornada</option>
-              <option value="">Cadastrar depois</option>
-              {jornadasDeTrabalho.map((jornada) => (
-                <option key={jornada.id} value={jornada.id}>
-                  {jornada.nome}
-                </option>
-              ))}
-            </select>
-          </div>
+          <JornadasDeTrabalho
+            jornada={jornada}
+            handleJornadaChange={handleJornadaChange}
+            jornadasDeTrabalho={jornadasDeTrabalho}
+          />
           <div className="flex justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring"

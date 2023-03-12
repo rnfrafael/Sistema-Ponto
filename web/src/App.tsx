@@ -3,7 +3,7 @@ import { Header } from "./components/";
 import About from "./pages/About/About";
 
 import BaterPonto from "./pages/BaterPonto/BaterPonto";
-import FormCadastroPessoa from "./pages/FormCadastroPessoa/FormCadastroPessoa";
+import FormCadastroPessoa from "./pages/FormCadastroPessoa";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 function App() {
