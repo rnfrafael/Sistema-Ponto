@@ -8,7 +8,6 @@ import ErrorMessageInput from "../../components/ErrorMessageInput";
 import { cadastrarPessoa } from "./functions";
 import { ICadastroPessoa, IJornadas } from "./InterfacesCadastroPessoa";
 import { JornadasDeTrabalho } from "./JornadasDeTrabalho";
-import { FetchComp } from "./FetchComp";
 
 function FormCadastroPessoa() {
   //----inputs----
@@ -26,21 +25,21 @@ function FormCadastroPessoa() {
   const [tipoDeIconeFalha, setTipoDeIconeFalha] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   async function fetchJornadas() {
-  //     setIsLoading(true);
-  //     try {
-  //       const response = await fetch(`${BASE_URL_API}/jornadas`);
-  //       const data: IJornadas[] = await response.json();
-  //       setJornadasDeTrabalho(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //       setIsLoading(false);
-  //     }
-  //   }
-  //   fetchJornadas();
-  //   setIsLoading(false);
-  // }, []);
+  useEffect(() => {
+    async function fetchJornadas() {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`${BASE_URL_API}/jornadas`);
+        const data: IJornadas[] = await response.json();
+        setJornadasDeTrabalho(data);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      }
+    }
+    fetchJornadas();
+    setIsLoading(false);
+  }, []);
 
   const handleNomeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNome(event.target.value);
@@ -200,7 +199,11 @@ function FormCadastroPessoa() {
               required
             />
           </div>
-          <FetchComp />
+          <JornadasDeTrabalho
+            jornada={jornada}
+            handleJornadaChange={handleJornadaChange}
+            jornadasDeTrabalho={jornadasDeTrabalho}
+          />
           <div className="flex justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring"

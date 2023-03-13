@@ -1,5 +1,4 @@
 import React from "react";
-import { FetchComp } from "./FetchComp";
 import { IJornadas } from "./InterfacesCadastroPessoa";
 
 type Props = {
@@ -29,7 +28,11 @@ export const JornadasDeTrabalho = ({
         onChange={handleJornadaChange}
       >
         <option value="">Selecione uma jornada</option>
-        <FetchComp />
+        {jornadasDeTrabalho.map((jornada) => (
+          <option key={jornada.id} value={jornada.id}>
+            {jornada.nome}
+          </option>
+        ))}
       </select>
     </div>
   );

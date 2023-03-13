@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ErrorORSuccess from "./ErrorOrSuccess";
 
-export interface IErrorPopupTimeout {
+interface IErrorPopupTimeout {
   mensagem?: string;
   data?: Date;
   nome?: string;
@@ -24,8 +24,6 @@ function ErrorPopupTimeout({
         timeStyle: "medium",
       }).format(data)
     : "";
-
-  // const dataToPtBr = data.toString();
 
   useEffect(() => {
     const timer = setTimeout(() => {

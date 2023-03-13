@@ -7,12 +7,13 @@
     "dev": "vite --port 4000",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "commit": "cz",
+    "commit": "git cz",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.26.1",
+    "axios": "^1.3.4",
     "clsx": "^1.2.1",
     "comigo-tech-react-input-mask": "^3.0.0-alpha.3",
     "phosphor-react": "^1.4.1",
@@ -43,7 +44,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "./web/node_modules/cz-conventional-changelog"
     }
   }
 }
