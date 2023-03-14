@@ -1,12 +1,12 @@
 # Sistema de ponto
 
-<!---Esses são exemplos. Veja https://shields.io para outras pessoas ou para personalizar este conjunto de escudos. Você pode querer incluir dependências, status do projeto e informações de licença aqui--->
-
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/rnfrafael/Sistema-Ponto)
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/rnfrafael/Sistema-Ponto)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/rnfrafael/Sistema-Ponto)
 
 > Sistema básico para controle de ponto. Separado em 4 módulos, BackEnd, Web para controle geral, mobile para colaborador e tablet para registro de ponto.
+
+!(telas-web)[https://github.dev/rnfrafael/Sistema-Ponto/blob/d5909aa7b171eedce7a1dcc4a4954d2609e9adef/telas-web.png]
 
 ## Ajustes e melhorias e objetivos
 
