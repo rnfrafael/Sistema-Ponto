@@ -7,7 +7,7 @@ const Header = () => {
     <div className="bg-gray-800 text-white py-4 px-8 flex justify-between items-center">
       <div className="flex items-center">
         <Link to="/">
-          <img src={logoPng} alt="Logo" width={200} height={100} />
+          <img src={logoPng} alt="Logo" width={150} />
         </Link>
       </div>
       <NavBar />
