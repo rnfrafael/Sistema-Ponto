@@ -88,7 +88,7 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
 <table>
   <tr>
     <td align="center">
-      <a href="#">
+      <a href="https://github.com/rnfrafael/">
         <img src="https://avatars3.githubusercontent.com/u/15352006" width="100px;" alt="Foto do Rafael Fontenele no GitHub"/><br>
         <sub>
           <b>Rafael Fontenele</b>
@@ -96,7 +96,7 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
       </a>
     </td>
     <td align="center">
-      <a href="#">
+      <a href="https://github.com/rnfrafael/">
         <img src="https://avatars3.githubusercontent.com/u/127335153" width="100px;" alt="Foto do Marcio Aldizio JR"/><br>
         <sub>
           <b>Marcio Aldizio JR</b>
